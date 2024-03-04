@@ -47,3 +47,12 @@
       - /home/{{ current_username }}
       - /etc/skel
 
+  - name: Setup .bashrc file
+    ansible.builtin.lineinfile:
+      path: "{{ item }}/.bashrc"
+      regexp: "^EDITOR="
+      line: EDITOR=/usr/bin/vim
+    loop:
+      - /root
+      - /home/{{ current_username }}
+
