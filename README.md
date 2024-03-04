@@ -1,4 +1,4 @@
-# Ansible Fedora Environment Setup
+# Ansible PC Setup
 
 ## About
 
@@ -14,7 +14,7 @@ The playbooks are designed to be idempotent and can be run multiple times withou
 
 ```bash
 # Clone the repository using the following command
-git clone https://github.com/kosmolito/ansible-fedora-environment-setup.git
+git clone https://github.com/kosmolito/ansible-pc-setup.git
 
 # Change the directory to the cloned repository
 cd ansible-fedora-environment-setup
