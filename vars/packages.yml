@@ -33,3 +33,9 @@ dnf_packages_for_virtualbox:
   - elfutils-libelf-devel
   - zlib-devel
 
+flatpak_packages:
+  - com.bitwarden.desktop
+  - com.spotify.Client
+  - md.obsidian.Obsidian
+  - com.github.IsmaelMartinez.teams_for_linux
+  - com.brave.Browser
