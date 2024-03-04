@@ -1,0 +1,5 @@
+.vscode
+test*
+id_rsa
+private_key
+credentials
