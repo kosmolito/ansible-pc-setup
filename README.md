@@ -17,7 +17,7 @@ The playbooks are designed to be idempotent and can be run multiple times withou
 git clone https://github.com/kosmolito/ansible-pc-setup.git
 
 # Change the directory to the cloned repository
-cd ansible-fedora-environment-setup
+cd ansible-pc-setup
 
 # Install Ansible if it is not already installed
 sudo dnf update -y && sudo dnf install -y ansible
