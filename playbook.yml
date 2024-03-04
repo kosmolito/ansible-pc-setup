@@ -13,3 +13,7 @@
     ansible.builtin.hostname:
       name: "{{ desired_hostname }}"
 
+  - name: Ensure timezone is set
+    community.general.timezone:
+      name: Europe/Stockholm
+
