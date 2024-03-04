@@ -56,3 +56,47 @@
       - /root
       - /home/{{ current_username }}
 
+  ######## VirtualBox Blocks Begins ########
+  - name: Ensure virtualbox repo exist in yum.repo directory
+    ansible.builtin.get_url:
+      url: http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+      dest: /etc/yum.repos.d/virtualbox.repo
+
+  - name: Install packages for virtualbox
+    ansible.builtin.dnf:
+      name: "{{ dnf_packages_for_virtualbox }}"
+      state: latest
+    when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+    register: installed_packages
+
+  - name: Reboot the machine if Required
+    ansible.builtin.fail:
+      msg: Reboot Required. Please reboot the machine before continue
+    when: installed_packages.changed
+
+  - name: Install VirtualBox-7.0
+    ansible.builtin.dnf:
+      name: VirtualBox-7.0
+
+  - name: Ensure vboxdrv Service is stared and enabled
+    ansible.builtin.service:
+      name: vboxdrv
+      state: started
+      enabled: true
+
+  - name: Ensure /etc/vbox directory exists
+    ansible.builtin.file:
+      path: /etc/vbox
+      state: directory
+
+  - name: Setup VirtualBox Network
+    ansible.builtin.copy:
+      content: "* 192.168.56.0/16 192.168.99.0/24"
+      dest: /etc/vbox/networks.conf
+
+  - name: Ensure {{ current_username }} is in the libvirt and vboxusers group
+    ansible.builtin.user:
+      name: "{{ current_username }}"
+      groups: libvirt,vboxusers
+      append: yes
+  ######## END OF VirtualBox Blocks ########
