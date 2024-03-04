@@ -27,3 +27,14 @@
       src: "files/vscode.repo"
       dest: /etc/yum.repos.d/vscode.repo
 
+  - name: Install dnf packages
+    ansible.builtin.dnf:
+      name: "{{ dnf_packages }}"
+      state: latest
+    when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+
+  - name: Install packages from Flatpak
+    community.general.flatpak:
+      name: "{{ flatpak_packages }}"
+      state: present
+
