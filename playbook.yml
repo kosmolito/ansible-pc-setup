@@ -7,3 +7,9 @@
   vars:
     desired_hostname: fedora
     current_username: "{{ lookup('env', 'USERNAME') }}"
+  tasks:
+
+  - name: Set hostname to {{ desired_hostname }}
+    ansible.builtin.hostname:
+      name: "{{ desired_hostname }}"
+
