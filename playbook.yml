@@ -1,0 +1,9 @@
+- name: Setup Fedora Workstation
+  hosts: localhost
+  become: true
+  connection: local
+  vars_files:
+  - packages.yml
+  vars:
+    desired_hostname: fedora
+    current_username: "{{ lookup('env', 'USERNAME') }}"
