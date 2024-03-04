@@ -1,0 +1,26 @@
+dnf_packages:
+  - code
+  - git
+  - python3
+  - python3-pip
+  - vim
+  - curl
+  - wget
+  - htop
+  - tmux
+  - bash-completion
+  - jq
+  - tree
+  - nmap
+  - net-tools
+  - nmap-ncat
+  - rsync
+  - rclone
+  - snapd
+  - podman
+  - vagrant
+  - gnome-extensions-app
+  - gnome-tweaks
+  - gnome-shell-extension-dash-to-dock
+  - powershell
+
