@@ -17,3 +17,8 @@
     community.general.timezone:
       name: Europe/Stockholm
 
+  - name: Ensure Microsoft repo exist in yum.repo directory
+    ansible.builtin.get_url:
+      url: https://packages.microsoft.com/config/rhel/9/prod.repo
+      dest: /etc/yum.repos.d/microsoft.repo
+
