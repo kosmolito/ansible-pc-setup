@@ -38,3 +38,12 @@
       name: "{{ flatpak_packages }}"
       state: present
 
+  - name: Setup vimrc file
+    ansible.builtin.copy:
+      src: "files/.vimrc"
+      dest: "{{ item }}/.vimrc"
+    loop:
+      - /root
+      - /home/{{ current_username }}
+      - /etc/skel
+
