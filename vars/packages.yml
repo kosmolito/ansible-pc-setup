@@ -39,3 +39,4 @@ flatpak_packages:
   - md.obsidian.Obsidian
   - com.github.IsmaelMartinez.teams_for_linux
   - com.brave.Browser
+  - com.discordapp.Discord
