@@ -1,5 +1,7 @@
 .vscode
-test*
+*test*
 id_rsa
 private_key
 credentials
+collections
+*.log
