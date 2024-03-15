@@ -23,6 +23,8 @@ dnf_packages:
   - gnome-tweaks
   - gnome-shell-extension-dash-to-dock
   - powershell
+  - setools-console
+  - seahorse
 
 dnf_packages_for_virtualbox:
   - "@development-tools"
