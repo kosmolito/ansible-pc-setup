@@ -42,3 +42,4 @@ flatpak_packages:
   - com.github.IsmaelMartinez.teams_for_linux
   - com.brave.Browser
   - com.discordapp.Discord
+  - io.podman_desktop.PodmanDesktop
