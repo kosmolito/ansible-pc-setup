@@ -4,100 +4,124 @@
   connection: local
   gather_facts: true
   vars_files:
-  - packages.yml
+    - packages.yml
   vars:
-    desired_hostname: fedora
     current_username: "{{ lookup('env', 'USERNAME') }}"
   tasks:
+    - name: Ensure timezone is set
+      community.general.timezone:
+        name: Europe/Stockholm
 
-  - name: Set hostname to {{ desired_hostname }}
-    ansible.builtin.hostname:
-      name: "{{ desired_hostname }}"
+    - name: Ensure Microsoft repo exist in yum.repo directory
+      ansible.builtin.get_url:
+        url: https://packages.microsoft.com/config/rhel/9/prod.repo
+        dest: /etc/yum.repos.d/microsoft.repo
+        owner: root
+        group: root
+        mode: '0644'
 
-  - name: Ensure timezone is set
-    community.general.timezone:
-      name: Europe/Stockholm
+    - name: Ensure vscode repo exist in yum.repo directory
+      ansible.builtin.copy:
+        src: "files/vscode.repo"
+        dest: /etc/yum.repos.d/vscode.repo
+        owner: root
+        group: root
+        mode: '0644'
 
-  - name: Ensure Microsoft repo exist in yum.repo directory
-    ansible.builtin.get_url:
-      url: https://packages.microsoft.com/config/rhel/9/prod.repo
-      dest: /etc/yum.repos.d/microsoft.repo
+    - name: Install dnf packages
+      ansible.builtin.dnf:
+        name: "{{ dnf_packages }}"
+        state: present
+      when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
 
-  - name: Ensure vscode repo exist in yum.repo directory
-    ansible.builtin.copy:
-      src: "files/vscode.repo"
-      dest: /etc/yum.repos.d/vscode.repo
+    - name: Install packages from Flatpak
+      community.general.flatpak:
+        name: "{{ flatpak_packages }}"
+        state: present
 
-  - name: Install dnf packages
-    ansible.builtin.dnf:
-      name: "{{ dnf_packages }}"
-      state: latest
-    when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+    - name: Setup vimrc file
+      ansible.builtin.copy:
+        src: "files/.vimrc"
+        dest: "{{ item.path }}/.vimrc"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: '0644'
+      loop:
+        - path: /root
+          owner: root
+          group: root
+        - path: /home/{{ current_username }}
+          owner: "{{ current_username }}"
+          group: "{{ current_username }}"
+        - path: /etc/skel
+          owner: root
+          group: root
 
-  - name: Install packages from Flatpak
-    community.general.flatpak:
-      name: "{{ flatpak_packages }}"
-      state: present
+    - name: Setup .bashrc file
+      ansible.builtin.lineinfile:
+        path: "{{ item }}/.bashrc"
+        regexp: "^EDITOR="
+        line: EDITOR=/usr/bin/vim
+      loop:
+        - /root
+        - /home/{{ current_username }}
+        - /etc/skel
 
-  - name: Setup vimrc file
-    ansible.builtin.copy:
-      src: "files/.vimrc"
-      dest: "{{ item }}/.vimrc"
-    loop:
-      - /root
-      - /home/{{ current_username }}
-      - /etc/skel
+    ######## VirtualBox Blocks Begins ########
+    - name: Ensure virtualbox repo exist in yum.repo directory
+      ansible.builtin.get_url:
+        url: http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+        dest: /etc/yum.repos.d/virtualbox.repo
+        owner: root
+        group: root
+        mode: '0644'
 
-  - name: Setup .bashrc file
-    ansible.builtin.lineinfile:
-      path: "{{ item }}/.bashrc"
-      regexp: "^EDITOR="
-      line: EDITOR=/usr/bin/vim
-    loop:
-      - /root
-      - /home/{{ current_username }}
+    - name: Install packages for virtualbox
+      ansible.builtin.dnf:
+        name: "{{ dnf_packages_for_virtualbox }}"
+        state: present
+      when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
+      notify: Reboot the machine
 
-  ######## VirtualBox Blocks Begins ########
-  - name: Ensure virtualbox repo exist in yum.repo directory
-    ansible.builtin.get_url:
-      url: http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-      dest: /etc/yum.repos.d/virtualbox.repo
+    # We need to flush handlers to ensure that the handlers are executed here
+    # and not at the end of the play, which is the default behavior.
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
 
-  - name: Install packages for virtualbox
-    ansible.builtin.dnf:
-      name: "{{ dnf_packages_for_virtualbox }}"
-      state: latest
-    when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
-    register: installed_packages
+    - name: Install VirtualBox-7.0
+      ansible.builtin.dnf:
+        name: VirtualBox-7.0
 
-  - name: Reboot the machine if Required
-    ansible.builtin.fail:
-      msg: Reboot Required. Please reboot the machine before continue
-    when: installed_packages.changed
+    - name: Ensure vboxdrv Service is stared and enabled
+      ansible.builtin.service:
+        name: vboxdrv
+        state: started
+        enabled: true
 
-  - name: Install VirtualBox-7.0
-    ansible.builtin.dnf:
-      name: VirtualBox-7.0
+    - name: Ensure /etc/vbox directory exists
+      ansible.builtin.file:
+        path: /etc/vbox
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
 
-  - name: Ensure vboxdrv Service is stared and enabled
-    ansible.builtin.service:
-      name: vboxdrv
-      state: started
-      enabled: true
+    - name: Setup VirtualBox Network
+      ansible.builtin.copy:
+        content: "* 192.168.56.0/16 192.168.99.0/24"
+        dest: /etc/vbox/networks.conf
+        owner: root
+        group: root
+        mode: '0644'
 
-  - name: Ensure /etc/vbox directory exists
-    ansible.builtin.file:
-      path: /etc/vbox
-      state: directory
+    - name: Ensure user is in the libvirt and vboxusers group ({{ current_username }})
+      ansible.builtin.user:
+        name: "{{ current_username }}"
+        groups: libvirt,vboxusers
+        append: true
+    ######## END OF VirtualBox Blocks ########
 
-  - name: Setup VirtualBox Network
-    ansible.builtin.copy:
-      content: "* 192.168.56.0/16 192.168.99.0/24"
-      dest: /etc/vbox/networks.conf
-
-  - name: Ensure {{ current_username }} is in the libvirt and vboxusers group
-    ansible.builtin.user:
-      name: "{{ current_username }}"
-      groups: libvirt,vboxusers
-      append: yes
-  ######## END OF VirtualBox Blocks ########
+  handlers:
+    - name: Reboot the machine
+      ansible.builtin.fail:
+        msg: Reboot Required. Please reboot the machine before continue
