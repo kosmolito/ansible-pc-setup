@@ -1,0 +1,125 @@
+[apps/seahorse/listing]
+keyrings-selected=['openssh:///home/{{ current_username }}/.ssh']
+
+[apps/seahorse/windows/key-manager]
+height=476
+width=853
+
+[org/gnome/control-center]
+last-panel='bluetooth'
+window-state=(980, 640, false)
+
+[org/gnome/desktop/background]
+color-shading-type='solid'
+picture-options='zoom'
+picture-uri='file:///usr/share/backgrounds/gnome/blobs-l.svg'
+picture-uri-dark='file:///usr/share/backgrounds/gnome/blobs-d.svg'
+primary-color='#241f31'
+secondary-color='#000000'
+
+[org/gnome/desktop/input-sources]
+sources=[('xkb', 'se')]
+xkb-options=@as []
+
+[org/gnome/desktop/interface]
+clock-format='24h'
+color-scheme='prefer-dark'
+show-battery-percentage=true
+
+[org/gnome/desktop/peripherals/touchpad]
+tap-to-click=true
+two-finger-scrolling-enabled=true
+
+[org/gnome/desktop/wm/keybindings]
+show-desktop=['<Super>d']
+switch-applications=@as []
+switch-applications-backward=@as []
+switch-windows=['<Alt>Tab']
+switch-windows-backward=['<Shift><Alt>Tab']
+
+[org/gnome/gnome-system-monitor]
+current-tab='resources'
+maximized=false
+network-total-in-bits=false
+show-dependencies=false
+show-whose-processes='user'
+window-state=(1342, 747, 26, 23)
+
+[org/gnome/gnome-system-monitor/disktreenew]
+col-6-visible=true
+col-6-width=0
+
+[org/gnome/mutter]
+experimental-features=['scale-monitor-framebuffer']
+
+[org/gnome/nautilus/list-view]
+default-column-order=['name', 'size', 'type', 'owner', 'group', 'permissions', 'where', 'date_modified', 'date_modified_with_time', 'date_accessed', 'date_created', 'recency', 'detailed_type']
+default-visible-columns=['name', 'size', 'type', 'owner', 'permissions', 'date_modified', 'detailed_type']
+
+[org/gnome/nautilus/preferences]
+default-folder-viewer='list-view'
+migrated-gtk-settings=true
+search-filter-time-type='last_modified'
+
+[org/gnome/nautilus/window-state]
+initial-size=(1423, 746)
+maximized=true
+
+[org/gnome/settings-daemon/plugins/color]
+night-light-enabled=true
+
+[org/gnome/settings-daemon/plugins/power]
+sleep-inactive-ac-timeout=3600
+
+[org/gnome/shell]
+enabled-extensions=['background-logo@fedorahosted.org', 'dash-to-dock@micxgx.gmail.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com']
+favorite-apps=['org.gnome.Terminal.desktop', 'firefox.desktop', 'code.desktop', 'org.gnome.Calendar.desktop', 'com.brave.Browser.desktop', 'com.spotify.Client.desktop', 'com.brave.Browser.flextop.brave-cifhbcnohmdccbgoicgdjpfamggdegmo-Default.desktop', 'io.podman_desktop.PodmanDesktop.desktop', 'org.gnome.TextEditor.desktop', 'com.bitwarden.desktop.desktop', 'virtualbox.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop']
+remember-mount-password=false
+welcome-dialog-last-shown-version='45.4'
+
+[org/gnome/shell/extensions/dash-to-dock]
+background-opacity=0.80000000000000004
+click-action='minimize-or-previews'
+dash-max-icon-size=48
+dock-position='BOTTOM'
+height-fraction=0.90000000000000002
+multi-monitor=true
+preferred-monitor=-2
+preferred-monitor-by-connector='eDP-2'
+
+[org/gnome/shell/world-clocks]
+locations=@av []
+
+
+[org/gnome/terminal/legacy/profiles]
+audible-bell=false
+cursor-shape='ibeam'
+default-size-columns=100
+default-size-rows=30
+font='Monospace 15'
+text-blink-mode='always'
+use-system-font=false
+
+[org/gtk/gtk4/settings/file-chooser]
+show-hidden=false
+sort-directories-first=false
+
+[org/gtk/settings/file-chooser]
+date-format='regular'
+location-mode='path-bar'
+show-hidden=false
+show-size-column=true
+show-type-column=true
+sidebar-width=157
+sort-column='name'
+sort-directories-first=false
+sort-order='ascending'
+type-format='category'
+window-position=(106, 174)
+window-size=(1203, 721)
+
+[org/gnome/clocks]
+{% raw -%}
+timers=[{'duration': <10800>, 'name': <''>}]
+world-clocks=[{'location': <(uint32 2, <('Los Angeles', 'KCQT', true, [(0.59370283970450188, -2.0644336110828618)], [(0.59432360095955872, -2.063741622941031)])>)>}, {'location': <(uint32 2, <('New York', 'KNYC', true, [(0.71180344078725644, -1.2909618758762367)], [(0.71059804659265924, -1.2916478949920254)])>)>}, {'location': <(uint32 2, <('London', 'EGWU', true, [(0.89971722940307675, -0.007272211034407213)], [(0.89884456477707964, -0.0020362232784242244)])>)>}, {'location': <(uint32 2, <('Istanbul', 'LTBA', true, [(0.71500322271810779, 0.50294571860079684)], [(0.71590981654476371, 0.505529765824837)])>)>}, {'location': <(uint32 2, <('Sydney', 'YSSY', true, [(-0.59253928105207498, 2.6386469349889961)], [(-0.59137572239964786, 2.6392287230418559)])>)>}]
+{% endraw %}

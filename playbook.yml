@@ -7,6 +7,7 @@
     - packages.yml
   vars:
     current_username: "{{ lookup('env', 'USERNAME') }}"
+    dconf_dir: "/home/{{ current_username }}/.config/dconf"
   tasks:
     - name: Ensure Microsoft repo exist in yum.repo directory
       ansible.builtin.get_url:
@@ -116,6 +117,23 @@
         groups: libvirt,vboxusers
         append: true
     ######## END OF VirtualBox Blocks ########
+
+    - name: Ensure dconf directory exists
+      ansible.builtin.file:
+        path: "{{ dconf_dir }}"
+        state: directory
+        owner: "{{ current_username }}"
+        group: "{{ current_username }}"
+        mode: '0700'
+
+    - name: Generate dconf settings template
+      ansible.builtin.template:
+        src: "templates/dconf-settings.ini.j2"
+        dest: "{{ dconf_dir }}/dconf.ini"
+        owner: "{{ current_username }}"
+        group: "{{ current_username }}"
+        mode: '0600'
+      notify: Reload dconf settings
 
   handlers:
     - name: Reboot the machine
