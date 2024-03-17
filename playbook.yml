@@ -139,3 +139,8 @@
     - name: Reboot the machine
       ansible.builtin.fail:
         msg: Reboot Required. Please reboot the machine before continue
+
+    - name: Reload dconf settings
+      ansible.builtin.shell:
+        cmd: "dconf load / < {{ dconf_dir }}/dconf.ini"
+      changed_when: true
