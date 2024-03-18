@@ -25,6 +25,7 @@ dnf_packages:
   - powershell
   - setools-console
   - seahorse
+  - "@virtualization"
 
 dnf_packages_for_virtualbox:
   - "@development-tools"
