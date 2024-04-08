@@ -105,7 +105,7 @@
 
     - name: Setup VirtualBox Network
       ansible.builtin.copy:
-        content: "* 192.168.56.0/16 192.168.99.0/24"
+        content: "* 192.168.56.0/16 192.168.60.0/24 192.168.70.0/24 192.168.80.0/24 192.168.88.0/24 192.168.99.0/24"
         dest: /etc/vbox/networks.conf
         owner: root
         group: root
