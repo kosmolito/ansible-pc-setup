@@ -25,6 +25,6 @@ sudo dnf update -y && sudo dnf install -y ansible
 # Install the required Ansible collections, if they are not already installed
 ansible-galaxy collection install -r requirements.yml
 
-# Run the playbooks. -K flag is used to prompt for the sudo password
-ansible-playbook -K playbook.yml
+# Run the playbooks.
+ansible-playbook local.yml
 ```
