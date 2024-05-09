@@ -1,4 +1,5 @@
-dnf_packages:
+common_dnf_packages:
+  - ansible
   - code
   - git
   - python3
@@ -19,14 +20,33 @@ dnf_packages:
   - snapd
   - podman
   - vagrant
-  - gnome-extensions-app
-  - gnome-tweaks
-  - gnome-shell-extension-dash-to-dock
   - powershell
   - setools-console
   - seahorse
   - "@virtualization"
   - awscli2
+
+gnome_dnf_packages:
+  - gnome-extensions-app
+  - gnome-tweaks
+  - gnome-shell-extension-dash-to-dock
+
+sway_dnf_packages:
+  - sway
+  - swaylock
+  - swayidle
+  - waybar
+  - mako # Check this package
+  - grim
+  - slurp
+  - wl-clipboard
+  - bemenu # Check this package
+  - kanshi
+  - wlroots
+  - swaybg
+  - swaylock-effects # Check this package
+  - gammastep
+  - gammastep-indicator
 
 
 dnf_packages_for_virtualbox:
