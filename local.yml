@@ -72,7 +72,7 @@
           owner: root
           group: root
 
-    - name: Setup .bashrc file
+    - name: Make vim as default editor in .bashrc file
       ansible.builtin.lineinfile:
         path: "{{ item }}/.bashrc"
         regexp: "^EDITOR="
