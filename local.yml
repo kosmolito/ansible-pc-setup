@@ -83,14 +83,6 @@
         - /etc/skel
 
     ######## VirtualBox Blocks Begins ########
-    - name: Ensure virtualbox repo exist in yum.repo directory
-      ansible.builtin.get_url:
-        url: http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-        dest: /etc/yum.repos.d/virtualbox.repo
-        owner: root
-        group: root
-        mode: '0644'
-
     - name: Install packages for virtualbox
       ansible.builtin.dnf:
         name: "{{ dnf_packages_for_virtualbox }}"
@@ -143,22 +135,22 @@
             name: "{{ gnome_dnf_packages }}"
             state: present
 
-    - name: Ensure dconf directory exists
-      ansible.builtin.file:
-        path: "{{ dconf_dir }}"
-        state: directory
-        owner: "{{ current_username }}"
-        group: "{{ current_username }}"
-        mode: '0700'
+        - name: Ensure dconf directory exists
+          ansible.builtin.file:
+            path: "{{ dconf_dir }}"
+            state: directory
+            owner: "{{ current_username }}"
+            group: "{{ current_username }}"
+            mode: '0700'
 
-    - name: Generate dconf settings template
-      ansible.builtin.template:
-        src: "templates/dconf-settings.ini.j2"
-        dest: "{{ dconf_dir }}/dconf.ini"
-        owner: "{{ current_username }}"
-        group: "{{ current_username }}"
-        mode: '0600'
-      notify: Reload dconf settings
+        - name: Generate dconf settings template
+          ansible.builtin.template:
+            src: "templates/dconf-settings.ini.j2"
+            dest: "{{ dconf_dir }}/dconf.ini"
+            owner: "{{ current_username }}"
+            group: "{{ current_username }}"
+            mode: '0600'
+          notify: Reload dconf settings
       when: desktop_environment == 'gnome'
     ######## END OF GNOME Blocks ########
 
@@ -210,4 +202,9 @@
     - name: Reload dconf settings
       ansible.builtin.shell:
         cmd: "dconf load / < {{ dconf_dir }}/dconf.ini"
+      changed_when: true
+
+    - name: Reload Sway
+      ansible.builtin.shell:
+        cmd: "swaymsg reload"
       changed_when: true
