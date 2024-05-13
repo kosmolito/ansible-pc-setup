@@ -162,6 +162,45 @@
       when: desktop_environment == 'gnome'
     ######## END OF GNOME Blocks ########
 
+    ######## SWAY Blocks Begins ########
+    - block:
+        - name: Install Sway dnf packages
+          ansible.builtin.dnf:
+            name: "{{ sway_dnf_packages }}"
+            state: present
+
+        - name: Copy background image to ~/Pictures directory
+          ansible.builtin.copy:
+            src: "files/sportcar-sunset.jpg"
+            dest: "/home/{{ current_username }}/Pictures/sportcar-sunset.jpg"
+            owner: "{{ current_username }}"
+            group: "{{ current_username }}"
+            mode: '0644'
+          notify: Reload Sway
+
+        - name: Copy .config directory to /home/{{ current_username }} directory
+          ansible.builtin.copy:
+            src: "templates/.config"
+            dest: "/home/{{ current_username }}"
+            owner: "{{ current_username }}"
+            group: "{{ current_username }}"
+            mode: '0700'
+          notify: Reload Sway
+
+
+        - name: Set TERM as xterm-256color in .bashrc file
+          ansible.builtin.lineinfile:
+            path: "{{ item }}/.bashrc"
+            regexp: "^export TERM="
+            line: "export TERM=xterm-256color"
+          loop:
+            - /root
+            - /home/{{ current_username }}
+            - /etc/skel
+          notify: Reload Sway
+
+      when: desktop_environment == 'sway'
+    ######## END OF Sway Blocks ########
 
   handlers:
     - name: Reboot the machine
