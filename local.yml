@@ -136,6 +136,13 @@
         append: true
     ######## END OF VirtualBox Blocks ########
 
+    ######## GNOME Blocks Begins ########
+    - block:
+        - name: Install gnome dnf packages
+          ansible.builtin.dnf:
+            name: "{{ gnome_dnf_packages }}"
+            state: present
+
     - name: Ensure dconf directory exists
       ansible.builtin.file:
         path: "{{ dconf_dir }}"
@@ -152,6 +159,9 @@
         group: "{{ current_username }}"
         mode: '0600'
       notify: Reload dconf settings
+      when: desktop_environment == 'gnome'
+    ######## END OF GNOME Blocks ########
+
 
   handlers:
     - name: Reboot the machine
