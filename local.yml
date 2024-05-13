@@ -10,7 +10,7 @@
       prompt: "Which desktop environment (gnome/sway) are you using?"
       private: no
   vars:
-    current_username: "{{ lookup('env', 'USERNAME') }}"
+    current_username: "{{ lookup('env', 'USER') }}"
     dconf_dir: "/home/{{ current_username }}/.config/dconf"
   tasks:
     ######## Validation Blocks Begins ########
@@ -31,17 +31,21 @@
         group: root
         mode: '0644'
 
-    - name: Ensure vscode repo exist in yum.repo directory
+    - name: Ensure yum repos exist in yum.repo directory
       ansible.builtin.copy:
-        src: "files/vscode.repo"
-        dest: /etc/yum.repos.d/vscode.repo
+        src: "files/{{ item }}"
+        dest: /etc/yum.repos.d/{{ item }}
         owner: root
         group: root
         mode: '0644'
+      loop:
+        - hashicorp.repo
+        - vscode.repo
+        - virtualbox.repo
 
-    - name: Install dnf packages
+    - name: Install common dnf packages
       ansible.builtin.dnf:
-        name: "{{ dnf_packages }}"
+        name: "{{ common_dnf_packages }}"
         state: present
       when: ansible_distribution == 'Fedora' or ansible_distribution == 'CentOS' or ansible_distribution == 'RedHat'
 
