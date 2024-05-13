@@ -5,6 +5,10 @@
   gather_facts: true
   vars_files:
     - packages.yml
+  vars_prompt:
+    - name: desktop_environment
+      prompt: "Which desktop environment (gnome/sway) are you using?"
+      private: no
   vars:
     current_username: "{{ lookup('env', 'USERNAME') }}"
     dconf_dir: "/home/{{ current_username }}/.config/dconf"
