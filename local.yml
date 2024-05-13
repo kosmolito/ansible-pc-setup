@@ -13,6 +13,16 @@
     current_username: "{{ lookup('env', 'USERNAME') }}"
     dconf_dir: "/home/{{ current_username }}/.config/dconf"
   tasks:
+    ######## Validation Blocks Begins ########
+    - fail:
+        msg: "This playbook is only for Fedora Workstation"
+      when: ansible_distribution != 'Fedora'
+
+    - fail:
+        msg: "Valid desktop environment is gnome or sway only"
+      when: desktop_environment not in ['gnome', 'sway']
+    ######## END OF Validation Blocks ########
+
     - name: Ensure Microsoft repo exist in yum.repo directory
       ansible.builtin.get_url:
         url: https://packages.microsoft.com/config/rhel/9/prod.repo
